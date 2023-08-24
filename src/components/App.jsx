@@ -7,15 +7,44 @@ export default function App() {
   function allNewDice() {
     let dice = [];
     for (let i = 0; i < 10; i++) {
-      dice.push(Math.ceil(Math.random() * 6));
+      dice.push({
+        value: Math.ceil(Math.random() * 6),
+        isHeld: false,
+        id: i,
+      });
     }
     return dice;
   }
 
-  const diceElements = dice.map((die) => <Die value={die} />);
+  const diceElements = dice.map((die) => (
+    <Die
+      key={die.id}
+      value={die.value}
+      isHeld={die.isHeld}
+      id={die.id}
+      hold={holdDie}
+    />
+  ));
 
   function rollDice() {
-    setDice(allNewDice());
+    setDice((oldDice) =>
+      oldDice.map((die) => {
+        return die.isHeld
+          ? die
+          : {
+              ...die,
+              value: Math.ceil(Math.random() * 6),
+            };
+      })
+    );
+  }
+
+  function holdDie(id) {
+    setDice((oldDice) =>
+      oldDice.map((die) => {
+        return die.id === id ? { ...die, isHeld: !die.isHeld } : die;
+      })
+    );
   }
 
   return (
