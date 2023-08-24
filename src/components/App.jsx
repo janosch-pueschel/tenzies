@@ -28,16 +28,21 @@ export default function App() {
   ));
 
   function rollDice() {
-    setDice((oldDice) =>
-      oldDice.map((die) => {
-        return die.isHeld
-          ? die
-          : {
-              ...die,
-              value: Math.ceil(Math.random() * 6),
-            };
-      })
-    );
+    if (tenzies) {
+      setTenzies(false);
+      setDice(allNewDice());
+    } else {
+      setDice((oldDice) =>
+        oldDice.map((die) => {
+          return die.isHeld
+            ? die
+            : {
+                ...die,
+                value: Math.ceil(Math.random() * 6),
+              };
+        })
+      );
+    }
   }
 
   function holdDie(id) {
